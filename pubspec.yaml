@@ -1,0 +1,21 @@
+name: discord_bot_dart
+description: A sample command-line application.
+version: 1.0.0
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.4.4
+
+dependencies:
+  drift: ^2.15.0
+  envied: ^0.5.4+1
+  nyxx: ^6.3.1
+  sqlite3: ^2.4.2
+  vit_dart_extensions: ^2.1.0
+
+dev_dependencies:
+  build_runner: ^2.4.11
+  drift_dev: ^2.15.0
+  envied_generator: ^0.5.4+1
+  lints: ^3.0.0
+  test: ^1.24.0
