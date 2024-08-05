@@ -1,6 +1,38 @@
-A sample command-line application with an entrypoint in `bin/`, library code
-in `lib/`, and example unit test in `test/`.
+A bot written in dart lang to manage todos.
 
+# Usage
+
+## Create todo
+
+`@TODO /ctd Some task`
+
+Output:
+```json
+{
+    "id": 1,
+    "title": "Some task",
+    "description": "",
+    "createdAt": "2024-08-04T20:03:20.000",
+}
+```
+
+## Setting description to a task
+
+`@TODO /etd #1 /d Some description`
+
+## Listing todos
+
+`@TODO /l`
+
+Output:
+
+- Some task (#1)
+> Some description
+- Some other task (#2)
+
+## Delete a todo
+
+`@TODO /dtd #1`
 
 # Commands
 
