@@ -1,5 +1,6 @@
 import 'package:discord_bot_dart/data/env.dart';
 import 'package:discord_bot_dart/repositories/extensions/todo_ext.dart';
+import 'package:discord_bot_dart/usecases/entities/todos/delete_todo.dart';
 import 'package:discord_bot_dart/usecases/entities/todos/edit_todo_description.dart';
 import 'package:discord_bot_dart/usecases/entities/todos/get_by_id.dart';
 import 'package:discord_bot_dart/usecases/entities/todos/insert_todo.dart';
@@ -71,16 +72,25 @@ Future<void> main(List<String> arguments) async {
 
     // Edit todo
     var editPat = RegExp(r'\/etd\s+#(\d+)\s+(.+)');
-    var match = editPat.firstMatch(msg);
-    if (match != null) {
-      var id = int.parse(match.group(1)!);
-      String rest = match.group(2)!;
+    var editMatch = editPat.firstMatch(msg);
+    if (editMatch != null) {
+      var id = int.parse(editMatch.group(1)!);
+      String rest = editMatch.group(2)!;
       if (rest.startsWith('/d')) {
         rest = rest.replaceFirst('/d', '').trim();
         await editTodoDescription(id, rest);
       }
       var todo = await getById(id);
       send(todo.toIdentedJson);
+      return;
+    }
+
+    var deletePat = RegExp(r'\/dtd\s+#(\d+)');
+    var deleteMatch = deletePat.firstMatch(msg);
+    if (deleteMatch != null) {
+      var id = int.parse(deleteMatch.group(1)!);
+      await deleteTodo(id);
+      send('Deleted 🗑️!');
       return;
     }
 

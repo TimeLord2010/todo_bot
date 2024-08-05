@@ -6,5 +6,7 @@ class Todos extends Table {
   TextColumn get title => text().withLength(min: 1)();
   TextColumn get description => text()();
   IntColumn get projectId => integer().nullable().references(Projects, #id)();
+  IntColumn get priority => integer().nullable()();
+  DateTimeColumn get deadline => dateTime().nullable()();
   DateTimeColumn get createdAt => dateTime()();
 }
