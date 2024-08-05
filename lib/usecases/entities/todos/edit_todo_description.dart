@@ -6,7 +6,7 @@ Future<void> editTodoDescription(int id, String description) async {
   var db = createDatabase();
   var update = db.update(db.todos);
   var where = update..where((x) => x.id.equals(id));
-  where.write(TodosCompanion(
+  await where.write(TodosCompanion(
     description: Value(description),
   ));
 }

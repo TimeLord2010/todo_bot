@@ -24,6 +24,9 @@ class AppDatabase extends _$AppDatabase {
         if (from < 3) {
           await m.addColumn(todos, todos.priority);
         }
+        if (from < 4) {
+          await m.addColumn(todos, todos.status);
+        }
       },
     );
   }
@@ -35,5 +38,5 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 }

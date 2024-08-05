@@ -1,5 +1,10 @@
 import 'package:discord_bot_dart/data/env.dart';
+import 'package:discord_bot_dart/repositories/extensions/project_ext.dart';
 import 'package:discord_bot_dart/repositories/extensions/todo_ext.dart';
+import 'package:discord_bot_dart/usecases/entities/projects/delete_project.dart';
+import 'package:discord_bot_dart/usecases/entities/projects/insert_project.dart';
+import 'package:discord_bot_dart/usecases/entities/projects/list_projects.dart';
+import 'package:discord_bot_dart/usecases/entities/todos/count_todos.dart';
 import 'package:discord_bot_dart/usecases/entities/todos/delete_todo.dart';
 import 'package:discord_bot_dart/usecases/entities/todos/edit_todo_description.dart';
 import 'package:discord_bot_dart/usecases/entities/todos/get_by_id.dart';
@@ -50,8 +55,10 @@ Future<void> main(List<String> arguments) async {
     }
 
     // List todos
-    if (msg.startsWith('/l')) {
+    if (msg.startsWith('/ltd')) {
       var todos = await listTodos();
+      var count = await countTodos();
+      var extras = count - todos.length;
       var content = todos.map((x) {
         var desc = x.description;
 
@@ -66,7 +73,12 @@ Future<void> main(List<String> arguments) async {
         ];
         return parts.join('\n');
       }).join('\n');
-      send('Todos:\n$content');
+      var parts = [
+        'Todos:',
+        content,
+        if (extras > 0) '-# $extras more',
+      ].join('\n');
+      send(parts);
       return;
     }
 
@@ -85,12 +97,45 @@ Future<void> main(List<String> arguments) async {
       return;
     }
 
+    // Delete todo
     var deletePat = RegExp(r'\/dtd\s+#(\d+)');
     var deleteMatch = deletePat.firstMatch(msg);
     if (deleteMatch != null) {
       var id = int.parse(deleteMatch.group(1)!);
       await deleteTodo(id);
       send('Deleted 🗑️!');
+      return;
+    }
+
+    // Create project
+    if (msg.startsWith('/cp')) {
+      var projectName = msg.replaceFirst('/cp', '');
+      var project = await insertProject(projectName);
+      send(project.toIdentedJson);
+      return;
+    }
+
+    // List projects
+    if (msg.startsWith('/lp')) {
+      var projects = await listProjects();
+      if (projects.isEmpty) {
+        send('No projects saved');
+        return;
+      }
+      var contents = projects.map((x) {
+        return '- ${x.title} (#${x.id})';
+      }).join('\n');
+      send(contents);
+      return;
+    }
+
+    // Delete project
+    var deleteProjectPat = RegExp(r'\/dp\s+#(\d+)');
+    var deleteProjectMatch = deleteProjectPat.firstMatch(msg);
+    if (deleteProjectMatch != null) {
+      var id = int.parse(deleteProjectMatch.group(1)!);
+      await deleteProject(id);
+      send('Deleted project #$id! 🗑️');
       return;
     }
 

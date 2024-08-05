@@ -22,7 +22,7 @@ Output:
 
 ## Listing todos
 
-`@TODO /l`
+`@TODO /ltd`
 
 Output:
 
